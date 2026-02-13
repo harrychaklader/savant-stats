@@ -1,0 +1,1022 @@
+endpoint:
+  name: statcast_search_csv
+  url: "https://baseballsavant.mlb.com/statcast_search/csv"
+  notes:
+    - "Fields discovered from endpoint header row with all available chk_stats_* flags enabled."
+    - "Some fields may vary by query context (group_by, player_type, selected filters)."
+
+csv_output_fields:
+  - pitches
+  - player_id
+  - player_name
+  - total_pitches
+  - pitch_percent
+  - ba
+  - iso
+  - babip
+  - slg
+  - woba
+  - xwoba
+  - xba
+  - hits
+  - abs
+  - launch_speed
+  - launch_angle
+  - spin_rate
+  - velocity
+  - effective_speed
+  - whiffs
+  - swings
+  - takes
+  - eff_min_vel
+  - release_extension
+  - pos3_int_start_distance
+  - pos4_int_start_distance
+  - pos5_int_start_distance
+  - pos6_int_start_distance
+  - pos7_int_start_distance
+  - pos8_int_start_distance
+  - pos9_int_start_distance
+  - pitcher_run_exp
+  - run_exp
+  - bat_speed
+  - swing_length
+  - pa
+  - bip
+  - singles
+  - doubles
+  - triples
+  - hrs
+  - so
+  - k_percent
+  - bb
+  - bb_percent
+  - api_break_z_with_gravity
+  - api_break_z_induced
+  - api_break_x_arm
+  - api_break_x_batter_in
+  - hyper_speed
+  - bbdist
+  - hardhit_percent
+  - barrels_per_bbe_percent
+  - barrels_per_pa_percent
+  - release_pos_z
+  - release_pos_x
+  - plate_x
+  - plate_z
+  - obp
+  - barrels_total
+  - batter_run_value_per_100
+  - xobp
+  - xslg
+  - pitcher_run_value_per_100
+  - xbadiff
+  - xobpdiff
+  - xslgdiff
+  - wobadiff
+  - swing_miss_percent
+  - arm_angle
+  - attack_angle
+  - attack_direction
+  - swing_path_tilt
+  - rate_ideal_attack_angle
+  - intercept_ball_minus_batter_pos_x_inches
+  - intercept_ball_minus_batter_pos_y_inches
+
+query_parameters:
+  notes:
+    - "Includes all named form/query parameters discovered from https://baseballsavant.mlb.com/statcast_search."
+    - "Also includes commonly used CSV endpoint parameters that may not appear as named form controls."
+  discovered_from_statcast_search_form:
+    - batter_stands
+    - batters_lookup[]
+    - chk_ab_results
+    - chk_batted_ball_direction
+    - chk_batter_stands
+    - chk_bb_location
+    - chk_bb_type
+    - chk_bip
+    - chk_contact
+    - chk_count
+    - chk_detailed_zone
+    - chk_event_age_bat
+    - chk_event_age_bat_legacy
+    - chk_event_age_pit
+    - chk_event_age_pit_legacy
+    - chk_event_api_break_x_arm
+    - chk_event_api_break_x_batter_in
+    - chk_event_api_break_z_induced
+    - chk_event_api_break_z_with_gravity
+    - chk_event_arm_angle
+    - chk_event_attack_angle
+    - chk_event_attack_direction
+    - chk_event_away_score
+    - chk_event_bat_score
+    - chk_event_bat_score_diff
+    - chk_event_bat_win_exp
+    - chk_event_batter_days_since_prev_game
+    - chk_event_batter_days_until_next_game
+    - chk_event_delev_delta_pitcher_run_exp
+    - chk_event_delev_delta_run_exp
+    - chk_event_effective_speed
+    - chk_event_estimated_ba_using_speedangle
+    - chk_event_estimated_slg_using_speedangle
+    - chk_event_fangraphs_est_woba_numer
+    - chk_event_fld_score
+    - chk_event_hit_distance_sc
+    - chk_event_home_score
+    - chk_event_home_score_diff
+    - chk_event_home_win_exp
+    - chk_event_hyper_speed
+    - chk_event_intercept_ball_minus_batter_pos_x_inches
+    - chk_event_intercept_ball_minus_batter_pos_y_inches
+    - chk_event_launch_angle
+    - chk_event_launch_speed
+    - chk_event_n_priorpa_thisgame_player_at_bat
+    - chk_event_n_thruorder_pitcher
+    - chk_event_pitch_name
+    - chk_event_pitcher_days_since_prev_game
+    - chk_event_pitcher_days_until_next_game
+    - chk_event_plate_x
+    - chk_event_plate_z
+    - chk_event_release_extension
+    - chk_event_release_pos_x
+    - chk_event_release_pos_z
+    - chk_event_release_speed
+    - chk_event_release_spin_rate
+    - chk_event_sweetspot_speed_mph
+    - chk_event_swing_length
+    - chk_event_swing_path_tilt
+    - chk_event_unadj_delta_pitcher_run_exp
+    - chk_event_unadj_delta_run_exp
+    - chk_game_date_gt
+    - chk_game_date_lt
+    - chk_home_road
+    - chk_if_alignment
+    - chk_inning
+    - chk_metric1_gt
+    - chk_metric1_lt
+    - chk_metric2_gt
+    - chk_metric2_lt
+    - chk_metric3_gt
+    - chk_metric3_lt
+    - chk_months
+    - chk_of_alignment
+    - chk_opponent
+    - chk_outs
+    - chk_pa
+    - chk_pitch_result
+    - chk_pitch_type
+    - chk_pitcher_throws
+    - chk_player_pitch_type
+    - chk_position
+    - chk_runner_on
+    - chk_situation
+    - chk_stadium
+    - chk_stats_abs
+    - chk_stats_api_break_x_arm
+    - chk_stats_api_break_x_batter_in
+    - chk_stats_api_break_z_induced
+    - chk_stats_api_break_z_with_gravity
+    - chk_stats_arm_angle
+    - chk_stats_attack_angle
+    - chk_stats_attack_direction
+    - chk_stats_ba
+    - chk_stats_babip
+    - chk_stats_barrels_per_bbe_percent
+    - chk_stats_barrels_per_pa_percent
+    - chk_stats_barrels_total
+    - chk_stats_bb
+    - chk_stats_bb_percent
+    - chk_stats_bbdist
+    - chk_stats_bip
+    - chk_stats_dbls
+    - chk_stats_delev_batter_run_value_per_100
+    - chk_stats_delev_pitcher_run_exp
+    - chk_stats_delev_pitcher_run_value_per_100
+    - chk_stats_delev_run_exp
+    - chk_stats_effective_speed
+    - chk_stats_hardhit_percent
+    - chk_stats_hbp
+    - chk_stats_hits
+    - chk_stats_hrs
+    - chk_stats_hyper_speed
+    - chk_stats_intercept_ball_minus_batter_pos_x_inches
+    - chk_stats_intercept_ball_minus_batter_pos_y_inches
+    - chk_stats_iso
+    - chk_stats_k_percent
+    - chk_stats_launch_angle
+    - chk_stats_launch_speed
+    - chk_stats_obp
+    - chk_stats_pa
+    - chk_stats_plate_x
+    - chk_stats_plate_z
+    - chk_stats_pos3_int_start_distance
+    - chk_stats_pos4_int_start_distance
+    - chk_stats_pos5_int_start_distance
+    - chk_stats_pos6_int_start_distance
+    - chk_stats_pos7_int_start_distance
+    - chk_stats_pos8_int_start_distance
+    - chk_stats_pos9_int_start_distance
+    - chk_stats_rate_ideal_attack_angle
+    - chk_stats_release_extension
+    - chk_stats_release_pos_x
+    - chk_stats_release_pos_z
+    - chk_stats_singles
+    - chk_stats_slg
+    - chk_stats_so
+    - chk_stats_spin_rate
+    - chk_stats_sweetspot_speed_mph
+    - chk_stats_swing_length
+    - chk_stats_swing_miss_percent
+    - chk_stats_swing_path_tilt
+    - chk_stats_swings
+    - chk_stats_triples
+    - chk_stats_unadj_batter_run_value_per_100
+    - chk_stats_unadj_pitcher_run_exp
+    - chk_stats_unadj_pitcher_run_value_per_100
+    - chk_stats_unadj_run_exp
+    - chk_stats_velocity
+    - chk_stats_whiffs
+    - chk_stats_woba
+    - chk_stats_wobadiff
+    - chk_stats_xba
+    - chk_stats_xbadiff
+    - chk_stats_xobp
+    - chk_stats_xobpdiff
+    - chk_stats_xslg
+    - chk_stats_xslgdiff
+    - chk_stats_xwoba
+    - chk_swings
+    - chk_takes
+    - chk_team
+    - chk_team_pitch_type
+    - chk_tracked_pitch
+    - chk_zones
+    - game_date_gt
+    - game_date_lt
+    - group_by
+    - home_road
+    - metric_1
+    - min_pas
+    - min_pitches
+    - min_results
+    - pitcher_throws
+    - pitchers_lookup[]
+    - player_event_sort
+    - player_type
+    - position
+    - runners_1b_lookup[]
+    - runners_2b_lookup[]
+    - runners_3b_lookup[]
+    - sort_col
+    - sort_order
+  common_csv_endpoint_parameters_not_exposed_as_named_form_controls:
+    - hfPT
+    - hfAB
+    - hfGT
+    - hfPR
+    - hfZ
+    - stadium
+    - hfBBT
+    - hfBBL
+    - hfNewZones
+    - hfPull
+    - hfC
+    - hfSea
+    - hfSit
+    - hfOuts
+    - opponent
+    - hfSA
+    - team
+    - hfRO
+    - hfFlag
+    - hfInn
+
+query_parameters_with_examples:
+  batter_stands:
+    example: R
+    sample_values:
+      - R
+      - L
+  batters_lookup[]:
+    example: "430911"
+    sample_values:
+      - "430911"
+      - "472551"
+      - "676265"
+      - "430631"
+      - "682928"
+  chk_ab_results:
+    example: null
+    sample_values: []
+  chk_batted_ball_direction:
+    example: null
+    sample_values: []
+  chk_batter_stands:
+    example: null
+    sample_values: []
+  chk_bb_location:
+    example: null
+    sample_values: []
+  chk_bb_type:
+    example: null
+    sample_values: []
+  chk_bip:
+    example: null
+    sample_values: []
+  chk_contact:
+    example: null
+    sample_values: []
+  chk_count:
+    example: null
+    sample_values: []
+  chk_detailed_zone:
+    example: null
+    sample_values: []
+  chk_event_age_bat:
+    example: null
+    sample_values: []
+  chk_event_age_bat_legacy:
+    example: null
+    sample_values: []
+  chk_event_age_pit:
+    example: null
+    sample_values: []
+  chk_event_age_pit_legacy:
+    example: null
+    sample_values: []
+  chk_event_api_break_x_arm:
+    example: null
+    sample_values: []
+  chk_event_api_break_x_batter_in:
+    example: null
+    sample_values: []
+  chk_event_api_break_z_induced:
+    example: null
+    sample_values: []
+  chk_event_api_break_z_with_gravity:
+    example: null
+    sample_values: []
+  chk_event_arm_angle:
+    example: null
+    sample_values: []
+  chk_event_attack_angle:
+    example: null
+    sample_values: []
+  chk_event_attack_direction:
+    example: null
+    sample_values: []
+  chk_event_away_score:
+    example: null
+    sample_values: []
+  chk_event_bat_score:
+    example: null
+    sample_values: []
+  chk_event_bat_score_diff:
+    example: null
+    sample_values: []
+  chk_event_bat_win_exp:
+    example: null
+    sample_values: []
+  chk_event_batter_days_since_prev_game:
+    example: null
+    sample_values: []
+  chk_event_batter_days_until_next_game:
+    example: null
+    sample_values: []
+  chk_event_delev_delta_pitcher_run_exp:
+    example: null
+    sample_values: []
+  chk_event_delev_delta_run_exp:
+    example: null
+    sample_values: []
+  chk_event_effective_speed:
+    example: null
+    sample_values: []
+  chk_event_estimated_ba_using_speedangle:
+    example: null
+    sample_values: []
+  chk_event_estimated_slg_using_speedangle:
+    example: null
+    sample_values: []
+  chk_event_fangraphs_est_woba_numer:
+    example: null
+    sample_values: []
+  chk_event_fld_score:
+    example: null
+    sample_values: []
+  chk_event_hit_distance_sc:
+    example: null
+    sample_values: []
+  chk_event_home_score:
+    example: null
+    sample_values: []
+  chk_event_home_score_diff:
+    example: null
+    sample_values: []
+  chk_event_home_win_exp:
+    example: null
+    sample_values: []
+  chk_event_hyper_speed:
+    example: null
+    sample_values: []
+  chk_event_intercept_ball_minus_batter_pos_x_inches:
+    example: null
+    sample_values: []
+  chk_event_intercept_ball_minus_batter_pos_y_inches:
+    example: null
+    sample_values: []
+  chk_event_launch_angle:
+    example: null
+    sample_values: []
+  chk_event_launch_speed:
+    example: null
+    sample_values: []
+  chk_event_n_priorpa_thisgame_player_at_bat:
+    example: null
+    sample_values: []
+  chk_event_n_thruorder_pitcher:
+    example: null
+    sample_values: []
+  chk_event_pitch_name:
+    example: null
+    sample_values: []
+  chk_event_pitcher_days_since_prev_game:
+    example: null
+    sample_values: []
+  chk_event_pitcher_days_until_next_game:
+    example: null
+    sample_values: []
+  chk_event_plate_x:
+    example: null
+    sample_values: []
+  chk_event_plate_z:
+    example: null
+    sample_values: []
+  chk_event_release_extension:
+    example: null
+    sample_values: []
+  chk_event_release_pos_x:
+    example: null
+    sample_values: []
+  chk_event_release_pos_z:
+    example: null
+    sample_values: []
+  chk_event_release_speed:
+    example: null
+    sample_values: []
+  chk_event_release_spin_rate:
+    example: null
+    sample_values: []
+  chk_event_sweetspot_speed_mph:
+    example: null
+    sample_values: []
+  chk_event_swing_length:
+    example: null
+    sample_values: []
+  chk_event_swing_path_tilt:
+    example: null
+    sample_values: []
+  chk_event_unadj_delta_pitcher_run_exp:
+    example: null
+    sample_values: []
+  chk_event_unadj_delta_run_exp:
+    example: null
+    sample_values: []
+  chk_game_date_gt:
+    example: null
+    sample_values: []
+  chk_game_date_lt:
+    example: null
+    sample_values: []
+  chk_home_road:
+    example: null
+    sample_values: []
+  chk_if_alignment:
+    example: null
+    sample_values: []
+  chk_inning:
+    example: null
+    sample_values: []
+  chk_metric1_gt:
+    example: null
+    sample_values: []
+  chk_metric1_lt:
+    example: null
+    sample_values: []
+  chk_metric2_gt:
+    example: null
+    sample_values: []
+  chk_metric2_lt:
+    example: null
+    sample_values: []
+  chk_metric3_gt:
+    example: null
+    sample_values: []
+  chk_metric3_lt:
+    example: null
+    sample_values: []
+  chk_months:
+    example: null
+    sample_values: []
+  chk_of_alignment:
+    example: null
+    sample_values: []
+  chk_opponent:
+    example: null
+    sample_values: []
+  chk_outs:
+    example: null
+    sample_values: []
+  chk_pa:
+    example: null
+    sample_values: []
+  chk_pitch_result:
+    example: null
+    sample_values: []
+  chk_pitch_type:
+    example: null
+    sample_values: []
+  chk_pitcher_throws:
+    example: null
+    sample_values: []
+  chk_player_pitch_type:
+    example: null
+    sample_values: []
+  chk_position:
+    example: null
+    sample_values: []
+  chk_runner_on:
+    example: null
+    sample_values: []
+  chk_situation:
+    example: null
+    sample_values: []
+  chk_stadium:
+    example: null
+    sample_values: []
+  chk_stats_abs:
+    example: null
+    sample_values: []
+  chk_stats_api_break_x_arm:
+    example: null
+    sample_values: []
+  chk_stats_api_break_x_batter_in:
+    example: null
+    sample_values: []
+  chk_stats_api_break_z_induced:
+    example: null
+    sample_values: []
+  chk_stats_api_break_z_with_gravity:
+    example: null
+    sample_values: []
+  chk_stats_arm_angle:
+    example: null
+    sample_values: []
+  chk_stats_attack_angle:
+    example: null
+    sample_values: []
+  chk_stats_attack_direction:
+    example: null
+    sample_values: []
+  chk_stats_ba:
+    example: null
+    sample_values: []
+  chk_stats_babip:
+    example: null
+    sample_values: []
+  chk_stats_barrels_per_bbe_percent:
+    example: null
+    sample_values: []
+  chk_stats_barrels_per_pa_percent:
+    example: null
+    sample_values: []
+  chk_stats_barrels_total:
+    example: null
+    sample_values: []
+  chk_stats_bb:
+    example: null
+    sample_values: []
+  chk_stats_bb_percent:
+    example: null
+    sample_values: []
+  chk_stats_bbdist:
+    example: null
+    sample_values: []
+  chk_stats_bip:
+    example: null
+    sample_values: []
+  chk_stats_dbls:
+    example: null
+    sample_values: []
+  chk_stats_delev_batter_run_value_per_100:
+    example: null
+    sample_values: []
+  chk_stats_delev_pitcher_run_exp:
+    example: null
+    sample_values: []
+  chk_stats_delev_pitcher_run_value_per_100:
+    example: null
+    sample_values: []
+  chk_stats_delev_run_exp:
+    example: null
+    sample_values: []
+  chk_stats_effective_speed:
+    example: null
+    sample_values: []
+  chk_stats_hardhit_percent:
+    example: null
+    sample_values: []
+  chk_stats_hbp:
+    example: null
+    sample_values: []
+  chk_stats_hits:
+    example: null
+    sample_values: []
+  chk_stats_hrs:
+    example: null
+    sample_values: []
+  chk_stats_hyper_speed:
+    example: null
+    sample_values: []
+  chk_stats_intercept_ball_minus_batter_pos_x_inches:
+    example: null
+    sample_values: []
+  chk_stats_intercept_ball_minus_batter_pos_y_inches:
+    example: null
+    sample_values: []
+  chk_stats_iso:
+    example: null
+    sample_values: []
+  chk_stats_k_percent:
+    example: null
+    sample_values: []
+  chk_stats_launch_angle:
+    example: null
+    sample_values: []
+  chk_stats_launch_speed:
+    example: null
+    sample_values: []
+  chk_stats_obp:
+    example: null
+    sample_values: []
+  chk_stats_pa:
+    example: null
+    sample_values: []
+  chk_stats_plate_x:
+    example: null
+    sample_values: []
+  chk_stats_plate_z:
+    example: null
+    sample_values: []
+  chk_stats_pos3_int_start_distance:
+    example: null
+    sample_values: []
+  chk_stats_pos4_int_start_distance:
+    example: null
+    sample_values: []
+  chk_stats_pos5_int_start_distance:
+    example: null
+    sample_values: []
+  chk_stats_pos6_int_start_distance:
+    example: null
+    sample_values: []
+  chk_stats_pos7_int_start_distance:
+    example: null
+    sample_values: []
+  chk_stats_pos8_int_start_distance:
+    example: null
+    sample_values: []
+  chk_stats_pos9_int_start_distance:
+    example: null
+    sample_values: []
+  chk_stats_rate_ideal_attack_angle:
+    example: null
+    sample_values: []
+  chk_stats_release_extension:
+    example: null
+    sample_values: []
+  chk_stats_release_pos_x:
+    example: null
+    sample_values: []
+  chk_stats_release_pos_z:
+    example: null
+    sample_values: []
+  chk_stats_singles:
+    example: null
+    sample_values: []
+  chk_stats_slg:
+    example: null
+    sample_values: []
+  chk_stats_so:
+    example: null
+    sample_values: []
+  chk_stats_spin_rate:
+    example: null
+    sample_values: []
+  chk_stats_sweetspot_speed_mph:
+    example: null
+    sample_values: []
+  chk_stats_swing_length:
+    example: null
+    sample_values: []
+  chk_stats_swing_miss_percent:
+    example: null
+    sample_values: []
+  chk_stats_swing_path_tilt:
+    example: null
+    sample_values: []
+  chk_stats_swings:
+    example: null
+    sample_values: []
+  chk_stats_triples:
+    example: null
+    sample_values: []
+  chk_stats_unadj_batter_run_value_per_100:
+    example: null
+    sample_values: []
+  chk_stats_unadj_pitcher_run_exp:
+    example: null
+    sample_values: []
+  chk_stats_unadj_pitcher_run_value_per_100:
+    example: null
+    sample_values: []
+  chk_stats_unadj_run_exp:
+    example: null
+    sample_values: []
+  chk_stats_velocity:
+    example: null
+    sample_values: []
+  chk_stats_whiffs:
+    example: null
+    sample_values: []
+  chk_stats_woba:
+    example: null
+    sample_values: []
+  chk_stats_wobadiff:
+    example: null
+    sample_values: []
+  chk_stats_xba:
+    example: null
+    sample_values: []
+  chk_stats_xbadiff:
+    example: null
+    sample_values: []
+  chk_stats_xobp:
+    example: null
+    sample_values: []
+  chk_stats_xobpdiff:
+    example: null
+    sample_values: []
+  chk_stats_xslg:
+    example: null
+    sample_values: []
+  chk_stats_xslgdiff:
+    example: null
+    sample_values: []
+  chk_stats_xwoba:
+    example: null
+    sample_values: []
+  chk_swings:
+    example: null
+    sample_values: []
+  chk_takes:
+    example: null
+    sample_values: []
+  chk_team:
+    example: null
+    sample_values: []
+  chk_team_pitch_type:
+    example: null
+    sample_values: []
+  chk_tracked_pitch:
+    example: null
+    sample_values: []
+  chk_zones:
+    example: null
+    sample_values: []
+  game_date_gt:
+    example: null
+    sample_values: []
+  game_date_lt:
+    example: null
+    sample_values: []
+  group_by:
+    example: name
+    sample_values:
+      - name
+      - name-date
+      - name-month
+      - name-month-year
+      - name-year
+  hfAB:
+    example: null
+    sample_values: []
+  hfBBL:
+    example: null
+    sample_values: []
+  hfBBT:
+    example: null
+    sample_values: []
+  hfC:
+    example: null
+    sample_values: []
+  hfFlag:
+    example: null
+    sample_values: []
+  hfGT:
+    example: null
+    sample_values: []
+  hfInn:
+    example: null
+    sample_values: []
+  hfNewZones:
+    example: null
+    sample_values: []
+  hfOuts:
+    example: null
+    sample_values: []
+  hfPR:
+    example: null
+    sample_values: []
+  hfPT:
+    example: null
+    sample_values: []
+  hfPull:
+    example: null
+    sample_values: []
+  hfRO:
+    example: null
+    sample_values: []
+  hfSA:
+    example: null
+    sample_values: []
+  hfSea:
+    example: null
+    sample_values: []
+  hfSit:
+    example: null
+    sample_values: []
+  hfZ:
+    example: null
+    sample_values: []
+  home_road:
+    example: Home
+    sample_values:
+      - Home
+      - Road
+  metric_1:
+    example: null
+    sample_values: []
+  min_pas:
+    example: "0"
+    sample_values:
+      - "0"
+      - "5"
+      - "10"
+      - "20"
+      - "30"
+  min_pitches:
+    example: "0"
+    sample_values:
+      - "0"
+      - "2"
+      - "3"
+      - "4"
+      - "5"
+  min_results:
+    example: "0"
+    sample_values:
+      - "0"
+      - "2"
+      - "3"
+      - "4"
+      - "5"
+  opponent:
+    example: null
+    sample_values: []
+  pitcher_throws:
+    example: R
+    sample_values:
+      - R
+      - L
+  pitchers_lookup[]:
+    example: "430911"
+    sample_values:
+      - "430911"
+      - "472551"
+      - "671096"
+      - "676265"
+      - "690953"
+  player_event_sort:
+    example: api_p_release_speed
+    sample_values:
+      - api_p_release_speed
+      - api_p_release_spin_rate
+      - api_p_effective_speed
+      - api_release_pos_x
+      - api_release_pos_z
+  player_type:
+    example: pitcher
+    sample_values:
+      - pitcher
+      - batter
+      - fielder_2
+      - fielder_3
+      - fielder_4
+  position:
+    example: "2"
+    sample_values:
+      - "2"
+      - "3"
+      - "4"
+      - "6"
+      - "5"
+  runners_1b_lookup[]:
+    example: "430911"
+    sample_values:
+      - "430911"
+      - "472551"
+      - "676265"
+      - "430631"
+      - "682928"
+  runners_2b_lookup[]:
+    example: "430911"
+    sample_values:
+      - "430911"
+      - "472551"
+      - "676265"
+      - "430631"
+      - "682928"
+  runners_3b_lookup[]:
+    example: "430911"
+    sample_values:
+      - "430911"
+      - "472551"
+      - "676265"
+      - "430631"
+      - "682928"
+  sort_col:
+    example: pitches
+    sample_values:
+      - pitches
+      - pitch_percent
+      - ba
+      - xba
+      - xbadiff
+  sort_order:
+    example: desc
+    sample_values:
+      - desc
+      - asc
+  stadium:
+    example: null
+    sample_values: []
+  team:
+    example: null
+    sample_values: []
+
+real_request_sample:
+  description: "Actual request used to pull batter xwOBA/wOBA leaderboard data"
+  endpoint: "https://baseballsavant.mlb.com/statcast_search/csv"
+  full_url: "https://baseballsavant.mlb.com/statcast_search/csv?hfPT=&hfAB=&hfGT=R%7C&hfPR=&hfZ=&stadium=&hfBBT=&hfBBL=&hfNewZones=&hfPull=&hfC=&hfSea=2025%7C&hfSit=&player_type=batter&hfOuts=&opponent=&pitcher_throws=&batter_stands=&hfSA=&game_date_gt=2025-09-22&game_date_lt=2025-09-28&team=&position=&hfRO=&home_road=&hfFlag=&metric_1=&hfInn=&min_pitches=0&min_results=0&group_by=name&sort_col=xwoba&player_event_sort=api_p_release_speed&sort_order=desc&min_pas=0&chk_stats_pa=on&chk_stats_woba=on&chk_stats_xwoba=on"
+  query_parameters:
+    hfPT: ""
+    hfAB: ""
+    hfGT: "R|"
+    hfPR: ""
+    hfZ: ""
+    stadium: ""
+    hfBBT: ""
+    hfBBL: ""
+    hfNewZones: ""
+    hfPull: ""
+    hfC: ""
+    hfSea: "2025|"
+    hfSit: ""
+    player_type: "batter"
+    hfOuts: ""
+    opponent: ""
+    pitcher_throws: ""
+    batter_stands: ""
+    hfSA: ""
+    game_date_gt: "2025-09-22"
+    game_date_lt: "2025-09-28"
+    team: ""
+    position: ""
+    hfRO: ""
+    home_road: ""
+    hfFlag: ""
+    metric_1: ""
+    hfInn: ""
+    min_pitches: "0"
+    min_results: "0"
+    group_by: "name"
+    sort_col: "xwoba"
+    player_event_sort: "api_p_release_speed"
+    sort_order: "desc"
+    min_pas: "0"
+    chk_stats_pa: "on"
+    chk_stats_woba: "on"
+    chk_stats_xwoba: "on"
