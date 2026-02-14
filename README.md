@@ -76,3 +76,8 @@ Last 15 days (2025-09-14 to 2025-09-28)
 - discovered query parameters
 - example/sample parameter values
 - a real request sample with concrete query values
+
+`statsapi_game_status.yaml` includes:
+- endpoint metadata for `https://statsapi.mlb.com/api/v1/gameStatus`
+- response field definitions and optional fields
+- representative status objects from the endpoint response

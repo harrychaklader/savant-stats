@@ -1,0 +1,59 @@
+endpoint:
+  name: game_status
+  url: "https://statsapi.mlb.com/api/v1/gameStatus"
+  notes:
+    - "Returns the catalog of game status codes used by MLB StatsAPI."
+    - "Response is an array of status objects with optional reason values."
+
+http:
+  method: GET
+  content_type: application/json
+  authentication_required: false
+
+query_parameters:
+  notes:
+    - "No query parameters are required for this endpoint."
+  supported: []
+
+response:
+  top_level_type: array
+  item_type: object
+  item_fields:
+    - abstractGameState
+    - codedGameState
+    - detailedState
+    - statusCode
+    - abstractGameCode
+    - reason
+  optional_fields:
+    - reason
+  field_notes:
+    abstractGameState: "High-level state (for example: Preview, Live, Final)."
+    codedGameState: "Single-character game state code used in game feeds."
+    detailedState: "Human-readable detailed game status."
+    statusCode: "Specific status code (for example: S, I, F, DR, PL)."
+    abstractGameCode: "Single-character abstract code (for example: P, L, F)."
+    reason: "Optional reason when status reflects weather/review/forfeit details."
+
+sample_response_items:
+  - abstractGameState: Preview
+    codedGameState: S
+    detailedState: Scheduled
+    statusCode: S
+    abstractGameCode: P
+  - abstractGameState: Live
+    codedGameState: I
+    detailedState: In Progress
+    statusCode: I
+    abstractGameCode: L
+  - abstractGameState: Final
+    codedGameState: F
+    detailedState: Final
+    statusCode: F
+    abstractGameCode: F
+  - abstractGameState: Preview
+    codedGameState: P
+    detailedState: "Delayed Start: Rain"
+    statusCode: PR
+    abstractGameCode: P
+    reason: Rain
