@@ -1,7 +1,9 @@
+// index.js
 const { chromium } = require("playwright");
 const { parse } = require("csv-parse/sync");
+const readline = require("readline");
 
-const WINDOWS = [7, 15];
+const WINDOWS = [7, 21];
 const CSV_ENDPOINT = "https://baseballsavant.mlb.com/statcast_search/csv";
 const SCHEDULE_ENDPOINT = "https://statsapi.mlb.com/api/v1/schedule";
 const MIN_YEAR = 1900;
@@ -46,9 +48,10 @@ const BASE_CSV_QUERY = {
 
 function parseArgs(argv) {
   const args = {
-    year: 2025,
+    year: null,
     endDate: null,
     limit: null,
+    minPA: 0,
   };
 
   for (let i = 0; i < argv.length; i += 1) {
@@ -62,6 +65,9 @@ function parseArgs(argv) {
     } else if (token === "--limit" && argv[i + 1]) {
       args.limit = Number(argv[i + 1]);
       i += 1;
+    } else if (token === "--min-pa" && argv[i + 1]) {
+      args.minPA = Number(argv[i + 1]);
+      i += 1;
     }
   }
 
@@ -69,11 +75,14 @@ function parseArgs(argv) {
 }
 
 function assertArgs(args) {
-  if (!Number.isInteger(args.year) || args.year < MIN_YEAR) {
-    throw new Error("Invalid --year value. Expected an integer like 2025.");
+  if (args.year !== null && (!Number.isInteger(args.year) || args.year < MIN_YEAR)) {
+    throw new Error("Invalid year. Expected a positive integer like 2025.");
   }
   if (args.limit !== null && (!Number.isInteger(args.limit) || args.limit <= 0)) {
     throw new Error("Invalid --limit value. Expected a positive integer.");
+  }
+  if (args.minPA !== null && (!Number.isInteger(args.minPA) || args.minPA < 0)) {
+    throw new Error("Invalid minimum PA. Expected a non-negative integer.");
   }
 }
 
@@ -107,7 +116,7 @@ async function getLatestRegularSeasonDate(year) {
   const availableDates = dates.filter((date) => date <= today);
   if (!availableDates.length) {
     throw new Error(
-      `No regular season dates up to today (${today}) for year ${year}. Pass --end-date explicitly.`,
+      `No regular season dates up to today (${today}) for year ${year}. Pass --end-date explicitly.`
     );
   }
 
@@ -128,16 +137,13 @@ function buildCsvUrl({ year, startDate, endDate }) {
 async function downloadCsvViaBrowser(page, csvUrl) {
   const [download, navigationResult] = await Promise.all([
     page.waitForEvent("download", { timeout: 30_000 }),
-    page
-      .goto(csvUrl, { waitUntil: "commit" })
-      .catch((error) => error),
+    page.goto(csvUrl, { waitUntil: "commit" }).catch((error) => error),
   ]);
-  if (
-    navigationResult instanceof Error &&
-    !/download is starting/i.test(navigationResult.message)
-  ) {
+
+  if (navigationResult instanceof Error && !/download is starting/i.test(navigationResult.message)) {
     throw navigationResult;
   }
+
   const stream = await download.createReadStream();
   if (!stream) {
     throw new Error("Unable to open CSV download stream");
@@ -158,7 +164,8 @@ function numeric(value) {
   return Number.isNaN(n) ? Number.NaN : n;
 }
 
-function buildWindowRows(csvText, limit) {
+// Build table rows with Diff, filter by minPA, sort by Diff
+function buildWindowRows(csvText, limit, minPA) {
   const records = parse(csvText, {
     columns: true,
     skip_empty_lines: true,
@@ -176,10 +183,11 @@ function buildWindowRows(csvText, limit) {
         pa,
         woba,
         xwoba,
+        diff: xwoba - woba,
       };
     })
-    .filter((row) => row.player && row.playerId && !Number.isNaN(row.xwoba))
-    .sort((a, b) => b.xwoba - a.xwoba || b.woba - a.woba)
+    .filter((row) => row.player && row.playerId && !Number.isNaN(row.xwoba) && row.pa >= minPA)
+    .sort((a, b) => b.diff - a.diff || b.xwoba - a.xwoba)
     .map((row, idx) => ({
       Rank: idx + 1,
       Player: row.player,
@@ -187,20 +195,63 @@ function buildWindowRows(csvText, limit) {
       PA: Number.isNaN(row.pa) ? "" : row.pa,
       wOBA: Number.isNaN(row.woba) ? "" : row.woba.toFixed(3),
       xwOBA: row.xwoba.toFixed(3),
+      Diff: row.diff.toFixed(3),
     }));
 
   return Number.isInteger(limit) && limit > 0 ? ranked.slice(0, limit) : ranked;
+}
+
+// Ask input from the user
+async function askInput(promptText) {
+  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+  const answer = await new Promise((resolve) => rl.question(promptText, resolve));
+  rl.close();
+  return answer.trim();
 }
 
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   assertArgs(args);
 
-  const endDate = args.endDate || (await getLatestRegularSeasonDate(args.year));
+  // --- Ask year if not provided ---
+  let year = args.year;
+  const yearInput = await askInput(`Enter the year for the data [current: ${year || "2025"}]: `);
+  if (yearInput) {
+    year = Number(yearInput);
+    if (!Number.isInteger(year) || year < MIN_YEAR) {
+      console.error(`Invalid year entered, using ${year || 2025}`);
+      year = year || 2025;
+    }
+  }
+  args.year = year;
+
+  // --- Ask end date ---
+  let endDate = args.endDate;
+  if (!endDate) {
+    endDate = await askInput(
+      "Enter end date for the data (YYYY-MM-DD), leave empty for latest regular season date: "
+    );
+    if (!endDate) {
+      endDate = await getLatestRegularSeasonDate(args.year);
+    }
+  }
+
+  // --- Ask minimum PA ---
+  let minPA = args.minPA;
+  const minPAInput = await askInput(
+    `Enter minimum Plate Appearances (PA) to filter players [current: ${minPA}]: `
+  );
+  if (minPAInput) {
+    minPA = Number(minPAInput);
+    if (Number.isNaN(minPA) || minPA < 0) {
+      console.error("Invalid minimum PA, using 0");
+      minPA = 0;
+    }
+  }
 
   const end = new Date(`${endDate}T00:00:00Z`);
   if (Number.isNaN(end.getTime())) {
-    throw new Error(`Invalid --end-date value: ${endDate}`);
+    throw new Error(`Invalid end-date value: ${endDate}`);
   }
 
   const browser = await chromium.launch({ headless: true });
@@ -210,6 +261,7 @@ async function main() {
   try {
     console.log(`Year: ${args.year}`);
     console.log(`Anchor end date: ${endDate}`);
+    console.log(`Minimum PA: ${minPA}`);
 
     for (const days of WINDOWS) {
       const start = addDays(end, -(days - 1));
@@ -220,7 +272,7 @@ async function main() {
         endDate,
       });
       const csvText = await downloadCsvViaBrowser(page, csvUrl);
-      const tableRows = buildWindowRows(csvText, args.limit);
+      const tableRows = buildWindowRows(csvText, args.limit, minPA);
 
       console.log("");
       console.log(`Last ${days} days (${startDate} to ${endDate})`);
