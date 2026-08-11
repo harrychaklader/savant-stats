@@ -1,0 +1,867 @@
+# Baseball Savant Leaderboards Catalog
+# Base URL: https://baseballsavant.mlb.com/leaderboard/{type}
+# Pattern: ?year=2025&type=batter&team=&min=q&csv=true
+# Note: Path segments marked with NESTED are sub-paths (e.g. bat-tracking/swing-timing-miss-distance)
+
+leaderboards:
+  expected_statistics:
+    path: expected_statistics
+    display_name: Expected Statistics
+    category: Batting / Pitching
+    available_since: 2015
+    description: "xBA, xSLG, xwOBA, xISO, xOBP expected-statistics leaderboard"
+    params:
+      type:
+        options: [batter, pitcher, batter-team, pitcher-team]
+        default: batter
+        description: "player type (batter-team/pitcher-team for team-level)"
+      year:
+        type: integer
+        required: true
+      team:
+        description: "3-letter team abbreviation (ATL, BOS, NYY, etc.)"
+      position:
+        options: ["", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      min:
+        options: [q, 1, 25, 50, 100, 200, 250, 350, 450, 500, 600]
+        default: q
+        description: "minimum plate appearances (q = qualified)"
+      csv:
+        options: [true, false]
+    sample_output_columns:
+      - player_name
+      - player_id
+      - year
+      - xba
+      - xslg
+      - xwoba
+      - xobp
+      - xiso
+      - wo
+      - woba
+      - woba_est
+      - bb_pct
+      - k_pct
+
+  statcast_exit_velocity_barrels:
+    path: statcast
+    display_name: Exit Velocity & Barrels
+    category: Batting / Pitching
+    available_since: 2015
+    description: "Exit velocity, barrels, hard-hit%, EV50, launch angle sweet-spot%"
+    params:
+      year:
+        type: integer
+        required: true
+      type:
+        options: [batter, pitcher]
+        default: batter
+      team:
+        description: "3-letter team abbreviation"
+      min:
+        options: [q, 1, 25, 50, 100, 200, 250, 350, 450, 500, 600]
+        default: q
+      abs:
+        description: "minimum batted ball events (0-500)"
+      csv:
+        options: [true, false]
+    sample_output_columns:
+      - player_name
+      - player_id
+      - year
+      - attempts
+      - avg_hit_angle
+      - anglesweetspotpercent
+      - max_hit_speed
+      - avg_hit_speed
+      - ev50
+      - fbld
+      - gb
+      - max_distance
+      - avg_distance
+      - avg_hr_distance
+      - ev95plus
+      - ev95percent
+      - barrels
+      - brl_percent
+      - brl_pa
+
+  bat_tracking:
+    path: bat-tracking
+    display_name: Bat Tracking
+    category: Batting
+    available_since: 2023
+    available_since_detail: "First half of 2023 season"
+    description: "Bat speed, swing length, fast swing rate, squared-up rate, blasts, swords"
+    params:
+      year:
+        type: integer
+        required: true
+      type:
+        options: [batter, batter-team, pitcher, pitcher-team]
+        default: batter
+      team:
+        description: "3-letter team abbreviation"
+      min:
+        description: "minimum qualifier (q or number)"
+        default: q
+      csv:
+        options: [true, false]
+    sample_output_columns:
+      - player
+      - player_id
+      - season
+      - sport_id
+      - team_name
+      - swing_percent
+      - bat_speed
+      - fast_swing_percent
+      - avg_best_speed
+      - avg_squared_up_speed
+      - squared_up_percent
+      - blasts
+      - blast_percent
+      - swords
+      - sword_percent
+
+  percentile_rankings:
+    path: percentile-rankings
+    display_name: Percentile Rankings
+    category: Batting / Pitching
+    available_since: 2015
+    description: "MLB percentile rankings for Statcast metrics (batters: 2.1 PA/team game qualifier, pitchers: 1.25 PA/team game)"
+    params:
+      year:
+        type: integer
+        required: true
+      type:
+        options: [batter, pitcher]
+        default: batter
+      team:
+        description: "3-letter team abbreviation or empty for all"
+      csv:
+        options: [true, false]
+    qualifiers:
+      batter: "2.1 PA per team game"
+      pitcher: "1.25 PA per team game"
+
+  pitch_arsenal_stats:
+    path: pitch-arsenal-stats
+    display_name: Pitch Arsenal Stats
+    category: Pitching
+    available_since: 2017
+    description: "Pitcher arsenal usage, velocity, movement, results by pitch type"
+    params:
+      year:
+        type: integer
+        required: true
+      type:
+        options: [batter, pitcher]
+        default: pitcher
+      team:
+        description: "3-letter team abbreviation"
+      min:
+        description: "minimum pitches (q or number)"
+        default: q
+      csv:
+        options: [true, false]
+
+  pitch_arsenals:
+    path: pitch-arsenals
+    display_name: Pitch Arsenals
+    category: Pitching
+    available_since: 2017
+    description: "Pitch arsenals (velo/spin/movement) summary"
+    params:
+      year:
+        type: integer
+        required: true
+      min:
+        options: [50, 100, 250, 500, 750, 1000, 1500, 2000, 2500, 3000]
+        default: 100
+      hand:
+        options: ["", R, L]
+      type:
+        options: [n_, avg_spin, avg_speed]
+        default: n_
+        description: "n_ = percentages, avg_spin = average spin rate, avg_speed = average velocity"
+      csv:
+        options: [true, false]
+
+  outs_above_average:
+    path: outs_above_average
+    display_name: Outs Above Average
+    category: Fielding
+    available_since: 2016
+    description: "Range-based fielding metric showing outs saved vs average"
+    params:
+      year:
+        type: integer
+        required: true
+      type:
+        options: [Fielder]
+        default: Fielder
+      min_field:
+        options: [q, 0, 5, 25, 50, 75, 100, 150, 200, 250]
+        default: q
+      pos:
+        description: "position to filter (e.g. '2B', 'CF')"
+      roles:
+        description: "fielding roles"
+      viz:
+        options: [show_hide]
+      csv:
+        options: [true, false]
+
+  directional_oaa:
+    path: directional_oaa
+    display_name: Outfield Directional OAA
+    category: Fielding
+    available_since: 2016
+    description: "Outfield OAA split by direction (LF, CF, RF directions)"
+    params:
+      year:
+        type: integer
+        required: true
+      type:
+        options: [Fielder]
+        default: Fielder
+      csv:
+        options: [true, false]
+
+  catch_probability:
+    path: catch_probability
+    display_name: Outfield Catch Probability
+    category: Fielding
+    available_since: 2016
+    description: "Catch probability ratings for outfielders"
+    params:
+      year:
+        type: integer
+        required: true
+      csv:
+        options: [true, false]
+
+  outfield_jump:
+    path: outfield_jump
+    display_name: Outfielder Jump
+    category: Fielding
+    available_since: 2016
+    description: "Jump ratings - reaction and route efficiency for outfielders"
+    params:
+      year:
+        type: integer
+        required: true
+      type:
+        options: [Fielder]
+        default: Fielder
+      csv:
+        options: [true, false]
+
+  pop_time:
+    path: poptime
+    display_name: Catcher Pop Time
+    category: Catching
+    available_since: 2017
+    description: "Catcher pop time on stolen base attempts"
+    params:
+      year:
+        type: integer
+        required: true
+      min2b:
+        description: "minimum stolen-base attempts (0-5+)"
+      csv:
+        options: [true, false]
+
+  catcher_framing:
+    path: catcher-strike-zone
+    display_name: Catcher Framing
+    category: Catching
+    available_since: 2017
+    description: "Catcher framing - strikes above/below average, framing runs"
+    params:
+      year:
+        type: integer
+        required: true
+      csv:
+        options: [true, false]
+
+  catcher_blocking:
+    path: catcher-blocking
+    display_name: Catcher Blocking
+    category: Catching
+    available_since: 2017
+    description: "Catcher blocking - blocks above average, passed balls prevented"
+    params:
+      year:
+        type: integer
+        required: true
+      csv:
+        options: [true, false]
+
+  catcher_stance:
+    path: catcher-stance
+    display_name: Catcher Stance
+    category: Catching
+    available_since: 2017
+    description: "Catcher stance metrics"
+    params:
+      year:
+        type: integer
+        required: true
+      csv:
+        options: [true, false]
+
+  catcher_throwing:
+    path: catcher-throwing
+    display_name: Catcher Throwing
+    category: Catching
+    available_since: 2017
+    description: "Catcher throwing - caught stealing%, pop time, throw velocity"
+    params:
+      year:
+        type: integer
+        required: true
+      csv:
+        options: [true, false]
+
+  sprint_speed:
+    path: sprint_speed
+    display_name: Sprint Speed
+    category: Running
+    available_since: 2017
+    description: "Top running speed in ft/sec, bolt count (>30 ft/sec)"
+    params:
+      year:
+        type: integer
+        required: true
+      type:
+        options: [batter, fielder, runner]
+        default: batter
+      team:
+        description: "3-letter team abbreviation"
+      csv:
+        options: [true, false]
+
+  running_splits_90_ft:
+    path: running_splits
+    display_name: 90ft Running Splits
+    category: Running
+    available_since: 2017
+    description: "90-foot splits (home to first, etc.) in seconds"
+    params:
+      year:
+        type: integer
+        required: true
+      type:
+        options: [percent, raw]
+        default: raw
+        description: "percent = percentile stats, raw = raw seconds"
+      bats:
+        options: ["", R, L]
+      position:
+        options: ["", 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      team:
+        description: "3-letter team abbreviation"
+      min:
+        description: "minimum running opportunities (0, 5, 25, 50, 75, 100, 150, 200, 250)"
+        default: 0
+      csv:
+        options: [true, false]
+
+  arm_strength:
+    path: arm_strength
+    display_name: Arm Strength
+    category: Fielding
+    available_since: 2020
+    description: "Fielding arm strength (max/avg throw velocity in mph)"
+    params:
+      year:
+        type: integer
+        required: true
+      type:
+        options: [Fielder]
+        default: Fielder
+      pos:
+        description: "position filter"
+      csv:
+        options: [true, false]
+
+  arm_value:
+    path: baserunning
+    display_name: Arm Value
+    category: Fielding
+    available_since: 2020
+    description: "Fielding arm contribution to baserunner prevention (run value)"
+    params:
+      year:
+        type: integer
+        required: true
+      type:
+        options: [Fld]
+        default: Fld
+      csv:
+        options: [true, false]
+
+  pitch_movement:
+    path: pitch-movement
+    display_name: Pitch Movement
+    category: Pitching
+    available_since: 2017
+    description: "Pitch movement in inches (vertical/horizontal break) vs league average"
+    params:
+      year:
+        type: integer
+        required: true
+      type:
+        options: [pitcher]
+        default: pitcher
+      csv:
+        options: [true, false]
+
+  spin_direction:
+    path: spin-direction-pitches
+    display_name: Spin Direction
+    category: Pitching
+    available_since: 2017
+    description: "Pitch spin direction in degrees"
+    params:
+      year:
+        type: integer
+        required: true
+      csv:
+        options: [true, false]
+
+  active_spin:
+    path: active-spin
+    display_name: Active Spin
+    category: Pitching
+    available_since: 2017
+    description: "Active spin % - spin contributing to movement"
+    params:
+      year:
+        type: integer
+        required: true
+      csv:
+        options: [true, false]
+
+  pitcher_arm_angles:
+    path: pitcher-arm-angles
+    display_name: Arm Angle
+    category: Pitching
+    available_since: 2017
+    description: "Pitcher arm angle (release 3D angle)"
+    params:
+      year:
+        type: integer
+        required: true
+      csv:
+        options: [true, false]
+
+  pitch_tempo:
+    path: pitch-tempo
+    display_name: Pitch Tempo
+    category: Pitching
+    available_since: 2017
+    description: "Time between pitches (tempo)"
+    params:
+      year:
+        type: integer
+        required: true
+      type:
+        options: [Bat, Pitch]
+        default: Pitch
+      csv:
+        options: [true, false]
+
+  rolling:
+    path: rolling
+    display_name: Rolling Windows
+    category: Batting / Pitching
+    available_since: 2017
+    description: "Rolling window stats (custom date ranges, e.g. last 7/15/30 days)"
+    params:
+      year:
+        type: integer
+        required: true
+      type:
+        options: [batter, pitcher]
+        default: batter
+      team:
+        description: "3-letter team abbreviation"
+      csv:
+        options: [true, false]
+
+  home_runs:
+    path: home-runs
+    display_name: Home Runs
+    category: Batting
+    available_since: 2015
+    description: "Home run leaderboard with exit velocity, distance, launch angle"
+    params:
+      year:
+        type: integer
+        required: true
+      type:
+        options: [batter, hitter, Pitcher]
+        default: batter
+      csv:
+        options: [true, false]
+
+  swing_take:
+    path: swing-take
+    display_name: Run Value
+    category: Batting / Pitching
+    available_since: 2020
+    description: "Run value of swings vs takes"
+    params:
+      year:
+        type: integer
+        required: true
+      type:
+        options: [All]
+        default: All
+      team:
+        description: "3-letter team abbreviation"
+      group:
+        options: [Pitcher, Batter]
+        default: Batter
+      min:
+        options: [q]
+        default: q
+      csv:
+        options: [true, false]
+
+  year_to_year:
+    path: statcast-year-to-year
+    display_name: Year-to-Year Changes
+    category: Batting / Pitching
+    available_since: 2015
+    description: "Year-over-year changes in Statcast metrics"
+    params:
+      year:
+        type: integer
+        required: true
+      group:
+        options: [Pitcher, Batter]
+        default: Batter
+      csv:
+        options: [true, false]
+
+  park_factors:
+    path: statcast-park-factors
+    display_name: Statcast Park Factors
+    category: League
+    available_since: 2015
+    description: "Park factors based on Statcast batted ball data"
+    params:
+      year:
+        type: integer
+        required: true
+      csv:
+        options: [true, false]
+
+  pitcher_running_game:
+    path: pitcher-running-game
+    display_name: Pitcher Running Game
+    category: Pitching
+    available_since: 2017
+    description: "Baserunner prevention - stolen bases allowed, pickoffs, primary lead"
+    params:
+      year:
+        type: integer
+        required: true
+      csv:
+        options: [true, false]
+
+  timeout_infractions:
+    path: pitch-timer-infractions
+    display_name: Pitch Timer Infractions
+    category: League
+    available_since: 2023
+    description: "Pitch timer violations (batter/pitcher)"
+    params:
+      year:
+        type: integer
+        required: true
+      team:
+        description: "3-letter team abbreviation"
+      csv:
+        options: [true, false]
+
+  hot_stove:
+    path: hot-stove
+    display_name: Hot Stove
+    category: League
+    available_since: 2020
+    description: "Offseason transactions and player movement"
+    params:
+      year:
+        type: integer
+        required: true
+      csv:
+        options: [true, false]
+
+  top_performers:
+    path: top-performers
+    display_name: Top Performers
+    category: League
+    available_since: 2020
+    description: "Top performers across statistical categories"
+    params:
+      year:
+        type: integer
+        required: true
+      csv:
+        options: [true, false]
+
+  custom:
+    path: custom
+    display_name: Custom Leaderboard
+    category: Batting / Pitching
+    available_since: 2020
+    description: "Custom leaderboard builder"
+    params:
+      year:
+        type: integer
+        required: true
+      type:
+        options: [batter, pitcher]
+        default: batter
+      selections:
+        description: "comma-separated list of metrics to show"
+      filter:
+        description: "filter expression"
+      min_:
+        options: [q]
+        default: q
+      sort:
+        description: "sort column"
+      sort_dir:
+        options: [desc, asc]
+        default: desc
+      csv:
+        options: [false, true]
+        default: false
+
+  batting_stance:
+    path: visuals/batting-stance
+    display_name: Batting Stance
+    category: Visual
+    available_since: 2020
+    description: "Batting stance visualization"
+    format: HTML
+
+  swing_path_attack_angle:
+    path: bat-tracking/swing-path-attack-angle
+    display_name: Swing Path & Attack Angle
+    category: Batting
+    available_since: 2023
+    description: "Swing path tilt and attack angle leaderboard"
+    params:
+      season:
+        type: array
+        format: "season[]=2026"
+      type:
+        options: [batter, pitcher]
+      split:
+        description: "pitch type group split (e.g. api_pitch_type_group03)"
+
+  swing_timing_miss_distance:
+    path: bat-tracking/swing-timing-miss-distance
+    display_name: Swing Timing & Miss Distance
+    category: Batting
+    available_since: 2023
+    description: "Swing timing and miss distance (squared-up/sword analysis)"
+    params:
+      season:
+        type: array
+        format: "season[]=2026"
+      type:
+        options: [batter, pitcher]
+      split:
+        description: "pitch type group split"
+
+  fielder_positioning:
+    path: visuals/fielder-positioning
+    display_name: Fielder Positioning
+    category: Visual
+    available_since: 2020
+    description: "Fielder positioning visualization"
+    format: HTML
+
+  batter_positioning:
+    path: visuals/batter-positioning
+    display_name: Batter Positioning
+    category: Visual
+    available_since: 2020
+    description: "Batter positioning visualization"
+    format: HTML
+
+  pitcher_positioning:
+    path: visuals/pitcher-positioning
+    display_name: Pitcher Positioning
+    category: Visual
+    available_since: 2020
+    description: "Pitcher positioning visualization"
+    format: HTML
+
+  team_positioning:
+    path: visuals/team-positioning
+    display_name: Team Positioning
+    category: Visual
+    available_since: 2020
+    description: "Team defensive positioning visualization"
+    format: HTML
+
+  fielding_run_value:
+    path: fielding-run-value
+    display_name: Fielding Run Value
+    category: Fielding
+    available_since: 2020
+    description: "Overall fielding run value (OAA + framing + blocking + throwing)"
+    params:
+      year:
+        type: integer
+        required: true
+      type:
+        options: [Fielder]
+        default: Fielder
+      csv:
+        options: [true, false]
+
+  baserunning_run_value:
+    path: baserunning-run-value
+    display_name: Baserunning Run Value
+    category: Running
+    available_since: 2020
+    description: "Baserunning contribution (extra bases taken, steals, etc.)"
+    params:
+      year:
+        type: integer
+        required: true
+      csv:
+        options: [true, false]
+
+  basestealing_run_value:
+    path: basestealing-run-value
+    display_name: Basestealing Run Value
+    category: Running
+    available_since: 2020
+    description: "Stolen base run value"
+    params:
+      year:
+        type: integer
+        required: true
+      csv:
+        options: [true, false]
+
+  extra_bases_taken:
+    path: baserunning
+    display_name: Extra Bases Taken Run Value
+    category: Running
+    available_since: 2020
+    description: "Extra bases taken on hits run value"
+    params:
+      year:
+        type: integer
+        required: true
+      type:
+        options: [Runner]
+        default: Runner
+      csv:
+        options: [true, false]
+
+  abs_challenges:
+    path: abs-challenges
+    display_name: ABS Challenges
+    category: League
+    available_since: 2024
+    description: "Automatic Ball-Strike challenge results"
+    params:
+      year:
+        type: integer
+        required: true
+      csv:
+        options: [true, false]
+
+  metric_context:
+    path: statcast-metrics-context
+    display_name: Statcast Metrics Context
+    category: League
+    description: "Context and definitions for Statcast metrics"
+    format: HTML
+
+  birthday_index:
+    path: birthday-index
+    display_name: Sarah Langs Birthday Index
+    category: League
+    description: "Player stats on birthdays"
+    params:
+      csv:
+        options: [true, false]
+
+  batted_ball:
+    path: batted-ball
+    display_name: Batted Ball Profile
+    category: Batting / Pitching
+    available_since: 2015
+    description: "Batted ball profile - GB/LD/FB/PU rates, pull/oppo, speed/angle"
+    params:
+      year:
+        type: integer
+        required: true
+      type:
+        options: [batter, pitcher]
+      csv:
+        options: [true, false]
+
+common_params:
+  year:
+    type: integer
+    description: "Season year (2015-2026 for most leaderboards)"
+  type:
+    type: string
+    description: "player type - batter/pitcher/fielder (leaderboard-specific)"
+  team:
+    type: string
+    description: "3-letter team abbreviation (ATL, BOS, NYY, etc.) or empty for all"
+  min:
+    type: string | integer
+    description: "minimum qualifier - 'q' for qualified or a number"
+  csv:
+    type: boolean
+    description: "append &csv=true to download CSV instead of HTML"
+    default: false
+
+valid_team_abbreviations:
+  - ARI
+  - ATL
+  - BAL
+  - BOS
+  - CHC
+  - CIN
+  - CLE
+  - COL
+  - CWS
+  - DET
+  - HOU
+  - KC
+  - LAA
+  - LAD
+  - MIA
+  - MIL
+  - MIN
+  - NYM
+  - NYY
+  - OAK
+  - PHI
+  - PIT
+  - SD
+  - SEA
+  - SF
+  - STL
+  - TB
+  - TEX
+  - TOR
+  - WSH

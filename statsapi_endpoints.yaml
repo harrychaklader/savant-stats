@@ -1,0 +1,412 @@
+# MLB Stats API (statsapi.mlb.com) - Complementary Endpoints Catalog
+# Base URL: https://statsapi.mlb.com/api/v1
+# Auth: None required (public), MLBAM copyright applies
+# Primary use: player lookup, schedule, game feeds - complements Baseball Savant
+
+api:
+  name: MLB Stats API
+  base_url: "https://statsapi.mlb.com/api/v1"
+  version: "v1 (v1.1 for live feed diff/patch)"
+  format: JSON
+  auth: none
+
+endpoints:
+  sport:
+    name: sports
+    path: /sports
+    description: "All sports tracked by the Stats API"
+    params: {}
+  sport_by_id:
+    name: sport_by_id
+    path: /sports/{sportId}
+    description: "Single sport (sportId=1 is MLB)"
+    params:
+      sportId:
+        type: integer
+        required: true
+        example: 1
+
+  leagues:
+    name: leagues
+    path: /leagues
+    description: "All leagues (AL=103, NL=104)"
+    params: {}
+
+  seasons:
+    name: seasons
+    path: /seasons
+    description: "Season information"
+    params:
+      sportId:
+        type: integer
+        example: 1
+
+  team_list:
+    name: team_list
+    path: /teams
+    description: "All teams with venue/league info"
+    params:
+      sportId: "1 (MLB)"
+
+  team_info:
+    name: team_info
+    path: /teams/{teamId}
+    description: "Single team info"
+    params:
+      teamId:
+        type: integer
+        required: true
+
+  team_roster:
+    name: team_roster
+    path: /teams/{teamId}/roster
+    description: "Team roster (active / 40Man / fullRoster / allTime)"
+    params:
+      teamId:
+        type: integer
+        required: true
+      rosterType:
+        options: [active, 40Man, fullRoster, allTime, nonRosterInvitees, coaches]
+        default: active
+
+  team_personnel:
+    name: team_personnel
+    path: /teams/{teamId}/personnel
+    description: "Coaching staff"
+
+  team_leaders:
+    name: team_leaders
+    path: /teams/{teamId}/leaders
+    description: "Team statistical leaders"
+
+  team_statistics:
+    name: team_statistics
+    path: /teams/{teamId}/stats
+    description: "Team stats (aggregated)"
+
+  team_affiliates:
+    name: team_affiliates
+    path: /teams/{teamId}/affiliates
+    description: "Minor league affiliates"
+
+  team_alumni:
+    name: team_alumni
+    path: /teams/{teamId}/alumni
+    description: "Former players for a team"
+
+  schedule:
+    name: schedule
+    path: /schedule
+    description: "Game schedule by date/date-range/team"
+    params:
+      sportId: "1 (MLB)"
+      season: "2025"
+      gameType:
+        options: [R, S, A, D, F, L, W]
+      startDate: "YYYY-MM-DD"
+      endDate: "YYYY-MM-DD"
+      teamId: "team to filter"
+      hydrate: "team,venue,probablePitcher,linescore"
+
+  schedule_games:
+    name: schedule_games
+    path: /schedule/games
+    description: "Games for a date (lighter response)"
+
+  schedule_postseason:
+    name: schedule_postseason
+    path: /schedule/postseason
+    description: "Postseason schedule/bracket"
+
+  schedule_postseason_series:
+    name: schedule_postseason_series
+    path: /schedule/postseason/series
+    description: "Postseason series breakdown"
+
+  standings:
+    name: standings
+    path: /standings
+    description: "Division standings"
+    params:
+      leagueId: "103 (AL) or 104 (NL), comma-delimited"
+      season: "2025"
+      standingsTypes:
+        options: [regularSeason, springTraining, firstHalf, secondHalf, playoffs]
+      date: "YYYY-MM-DD (standings as of a date)"
+      hydrate: "team,league,division"
+
+  people_search:
+    name: people_search
+    path: /people/search
+    description: "Search players by name (returns player IDs)"
+    params:
+      names: "full name e.g. 'Aaron Judge'"
+      sportId: "1 (MLB)"
+      active: "true/false"
+    usage: "Resolve player name → MLBAM player ID → query Baseball Savant"
+
+  people:
+    name: people
+    path: /people/{personId}
+    description: "Player profile (bio, height, weight, draft info)"
+    params:
+      personId:
+        type: integer
+        required: true
+      hydrate: "currentTeam,stats,team"
+
+  people_stats:
+    name: people_stats
+    path: /people/{personId}/stats
+    description: "Player stats (seasonal, career, splits)"
+    params:
+      personId:
+        type: integer
+        required: true
+      stats:
+        options: [hitting, pitching, fielding, gameLog]
+        example: "stats=hitting&type=season&season=2025"
+      season: "2025"
+
+  people_current_game_stats:
+    name: people_current_game_stats
+    path: /people/{personId}/currentGameStats
+    description: "Live game stats for a player"
+
+  people_game_log:
+    name: people_game_log
+    path: /people/{personId}/gameLog
+    description: "Player game log (per-game results)"
+    params:
+      personId:
+        type: integer
+        required: true
+      group: "hitting, pitching, fielding"
+      season: "2025"
+
+  game_live_feed:
+    name: game_live_feed
+    path: /game/{gamePk}/feed/live
+    description: "Full live game feed (play-by-play, boxscore, linescore)"
+    version: "v1 (full) / v1.1 (diff/patch)"
+    params:
+      gamePk:
+        type: integer
+        required: true
+
+  game_boxscore:
+    name: game_boxscore
+    path: /game/{gamePk}/boxscore
+    description: "Box score for a game"
+
+  game_linescore:
+    name: game_linescore
+    path: /game/{gamePk}/linescore
+    description: "Linescore only (count, bases, pitchers)"
+
+  game_play_by_play:
+    name: game_play_by_play
+    path: /game/{gamePk}/playByPlay
+    description: "Play-by-play events"
+
+  game_win_probability:
+    name: game_win_probability
+    path: /game/{gamePk}/winProbability
+    description: "Win probability by play"
+
+  game_decisions:
+    name: game_decisions
+    path: /game/{gamePk}/decisions
+    description: "Winning/losing/saving pitcher decisions"
+
+  game_content:
+    name: game_content
+    path: /game/{gamePk}/content
+    description: "Game media content (highlights, editorial)"
+
+  game_status:
+    name: game_status
+    path: /gameStatus
+    description: "Catalog of game status codes"
+    see_docs: "statsapi_game_status.yaml"
+
+  venues:
+    name: venues
+    path: /venues
+    description: "All ballparks with location and field info"
+    params:
+      season: "2025"
+      hydrate: "location,fieldInfo"
+
+  venue_by_id:
+    name: venue_by_id
+    path: /venues/{venueId}
+    description: "Single ballpark"
+
+  stats:
+    name: stats
+    path: /stats
+    description: "Aggregated stats (cross-team, cross-player)"
+    params:
+      group: "hitting, pitching, fielding"
+      stats: "season, career"
+      season: "2025"
+      limit: "50"
+
+  stats_leaders:
+    name: stats_leaders
+    path: /stats/leaders
+    description: "Statistical leaders (leaderboard)"
+    params:
+      leaderCategories: "homeRuns, battingAverage, earnedRunAvg, wins"
+      season: "2025"
+      leaderGameTypes: "R"
+      limit: "10"
+
+  stats_streaks:
+    name: stats_streaks
+    path: /stats/streaks
+    description: "Active statistical streaks"
+
+  draft:
+    name: draft
+    path: /draft/{year}
+    description: "Full draft results for a year"
+    params:
+      year:
+        type: integer
+        required: true
+
+  draft_latest:
+    name: draft_latest
+    path: /draft/{year}/latest
+    description: "Latest picks in an active draft"
+
+  draft_prospects:
+    name: draft_prospects
+    path: /draft/prospects
+    description: "Draft prospects"
+
+  transactions:
+    name: transactions
+    path: /transactions
+    description: "Trades, signings, IL moves"
+    params:
+      teamId: "team to filter"
+      sportId: "1"
+      startDate: "YYYY-MM-DD"
+      endDate: "YYYY-MM-DD"
+
+  standings_endpoint_note: "See /standings in main list"
+
+  positions:
+    name: positions
+    path: /positions
+    description: "All position codes and types"
+
+  game_types:
+    name: game_types
+    path: /gameTypes
+    description: "All game type codes (R, S, A, D, F, L, W)"
+
+  awards:
+    name: awards
+    path: /awards
+    description: "Awards list (MVP, Cy Young, ROY, etc.)"
+
+  award_recipients:
+    name: award_recipients
+    path: /awards/{awardId}/recipients
+    description: "Award winners"
+    params:
+      awardId:
+        type: integer
+        required: true
+        example: "201 (MVP)"
+
+  attendance:
+    name: attendance
+    path: /attendance
+    description: "Team/league attendance records"
+
+  jobs:
+    name: jobs
+    path: /jobs
+    description: "Umpire crew assignments"
+    params:
+      sportId: "1"
+
+  umpires:
+    name: umpires
+    path: /umpires
+    description: "Umpire roster"
+
+  home_run_derby:
+    name: home_run_derby
+    path: /homerundby
+    description: "Home Run Derby data"
+    params:
+      gamePk:
+        type: integer
+        required: true
+
+  game_pace:
+    name: game_pace
+    path: /gamePace
+    description: "Pace-of-game statistics by season/team/league"
+
+  high_low:
+    name: high_low
+    path: /highLow
+    description: "High/low season records"
+
+  streaks_note: "See /stats/streaks"
+
+common_params:
+  hydrate:
+    description: "Embed sub-resources (team, league, venue, stats)"
+    example: "hydrate=team,venue,probablePitcher"
+  fields:
+    description: "Comma-delimited list of fields to return (topLevelNode, childNode, attribute)"
+    example: "fields=dates,date,teams"
+
+notes:
+  - "statsapi.mlb.com is JSON (not CSV)."
+  - "Live game feed has v1 (full) and v1.1 (diff/patch for efficient polling)."
+  - "Use /people/search to resolve names → IDs for use in Baseball Savant queries."
+  - "Use /schedule to get gamePk values needed for Baseball Savant /gf endpoint."
+  - "SportId=1 is MLB; minor leagues use different IDs."
+
+team_ids:
+  note: "Complete official list available via GET /teams"
+  examples:
+    Arizona Diamondbacks: 29
+    Atlanta Braves: 15
+    Baltimore Orioles: 1
+    Boston Red Sox: 2
+    Chicago Cubs: 16
+    Chicago White Sox: 4
+    Cincinnati Reds: 17
+    Cleveland Guardians: 5
+    Colorado Rockies: 27
+    Detroit Tigers: 6
+    Houston Astros: 18
+    Kansas City Royals: 7
+    Los Angeles Angels: 3
+    Los Angeles Dodgers: 19
+    Miami Marlins: 28
+    Milwaukee Brewers: 8
+    Minnesota Twins: 9
+    New York Mets: 21
+    New York Yankees: 10
+    Oakland Athletics: 11
+    Philadelphia Phillies: 22
+    Pittsburgh Pirates: 23
+    San Diego Padres: 25
+    San Francisco Giants: 26
+    Seattle Mariners: 12
+    St. Louis Cardinals: 24
+    Tampa Bay Rays: 30
+    Texas Rangers: 13
+    Toronto Blue Jays: 14
+    Washington Nationals: 20

@@ -1,0 +1,239 @@
+# Baseball Savant API Endpoints Catalog
+# Official MLB public Statcast platform
+# Base URL: https://baseballsavant.mlb.com
+# Cloud: Google Cloud (since 2020), Hawk-Eye optical tracking, Anthos/GKE/BigQuery
+# Auth: None required (public), MLBAM copyright applies
+
+endpoints:
+  - name: statcast_search_csv
+    description: "Pitch-level Statcast data with 200+ filter parameters. Returns CSV."
+    url: "https://baseballsavant.mlb.com/statcast_search/csv"
+    method: GET
+    format: CSV
+    rate_limit: "~25,000-30,000 rows per query"
+    timeout: "~30 seconds for complex queries"
+    required_params:
+      - player_type
+      - hfSea
+      - hfGT
+      - game_date_gt
+      - game_date_lt
+    common_params:
+      - hfPT
+      - hfAB
+      - hfGT
+      - hfPR
+      - hfZ
+      - stadium
+      - hfBBT
+      - hfBBL
+      - hfNewZones
+      - hfPull
+      - hfC
+      - hfSea
+      - hfSit
+      - player_type
+      - hfOuts
+      - opponent
+      - pitcher_throws
+      - batter_stands
+      - hfSA
+      - game_date_gt
+      - game_date_lt
+      - team
+      - position
+      - hfRO
+      - home_road
+      - hfFlag
+      - metric_1
+      - hfInn
+      - min_pitches
+      - min_results
+      - group_by
+      - sort_col
+      - player_event_sort
+      - sort_order
+      - min_pas
+      - chk_stats_pa
+      - chk_stats_woba
+      - chk_stats_xwoba
+    stat_checkboxes:
+      description: "86+ chk_stats_* parameters to include specific columns in output"
+      prefix: "chk_stats_"
+      examples:
+        - chk_stats_pa
+        - chk_stats_woba
+        - chk_stats_xwoba
+        - chk_stats_ba
+        - chk_stats_slg
+        - chk_stats_iso
+        - chk_stats_babip
+        - chk_stats_obp
+        - chk_stats_hrs
+        - chk_stats_bb
+        - chk_stats_so
+        - chk_stats_k_percent
+        - chk_stats_bb_percent
+        - chk_stats_barrels_per_bbe_percent
+        - chk_stats_barrels_per_pa_percent
+        - chk_stats_hardhit_percent
+        - chk_stats_launch_speed
+        - chk_stats_launch_angle
+        - chk_stats_spin_rate
+        - chk_stats_release_extension
+        - chk_stats_release_speed
+        - chk_stats_effective_speed
+        - chk_stats_sweetspot_speed_mph
+        - chk_stats_swing_length
+        - chk_stats_attack_angle
+        - chk_stats_attack_direction
+        - chk_stats_swing_path_tilt
+        - chk_stats_intercept_ball_minus_batter_pos_x_inches
+        - chk_stats_intercept_ball_minus_batter_pos_y_inches
+        - chk_stats_rate_ideal_attack_angle
+        - chk_stats_bat_speed
+        - chk_stats_swing_miss_percent
+        - chk_stats_whiffs
+        - chk_stats_swings
+        - chk_stats_takes
+    group_by_options:
+      - name
+      - name-date
+      - name-month
+      - name-month-year
+      - name-year
+    sort_col_options:
+      - pitches
+      - pitch_percent
+      - ba
+      - xba
+      - xbadiff
+      - xwoba
+      - woba
+      - slg
+      - launch_speed
+      - launch_angle
+      - spin_rate
+      - release_extension
+      - effective_speed
+    player_type_options:
+      - batter
+      - pitcher
+      - fielder_2
+      - fielder_3
+      - fielder_4
+    game_type_options:
+      - "R"  # Regular Season
+      - "PO" # Postseason
+      - "F"  # Wild Card
+      - "D"  # Division Series
+      - "L"  # League Championship
+      - "W"  # World Series
+      - "S"  # Spring Training
+      - "E"  # Exhibition
+      - "A"  # All-Star
+
+  - name: leaderboard
+    description: "~40 Statcast leaderboards, all support CSV download with ?csv=true"
+    base_url: "https://baseballsavant.mlb.com/leaderboard/{type}"
+    method: GET
+    format: "CSV (with ?csv=true) or HTML"
+    rate_limit: "No documented limit"
+    common_params:
+      - year
+      - type
+      - team
+      - min
+      - csv
+    see_leaderboards_file: "savant_leaderboards.yaml"
+
+  - name: player_page
+    description: "Player profile page with embedded JSON data blobs"
+    url: "https://baseballsavant.mlb.com/savant-player/{player_name}-{player_id}"
+    method: GET
+    format: HTML (embedded JSON)
+    params:
+      - stats:
+          description: "Stat type to display"
+          required: false
+          options:
+            - statcast-r-hitting-mlb
+            - statcast-r-pitching-mlb
+            - gamelogs-r-hitting-mlb
+            - gamelogs-r-pitching-mlb
+            - statcast-r-fielding-mlb
+            - statcast-r-baserunning-mlb
+
+  - name: gamefeed
+    description: "Real-time pitch-by-pitch JSON for a specific game"
+    url: "https://baseballsavant.mlb.com/gf"
+    method: GET
+    format: JSON
+    params:
+      - game_pk:
+          description: "MLB game ID (from statsapi schedule)"
+          required: true
+          type: integer
+
+  - name: comparison_tool
+    description: "Player comparison tool (HTML UI, 2026+)"
+    url: "https://baseballsavant.mlb.com/comparison-tool"
+    method: GET
+    format: HTML
+
+  - name: visuals
+    description: "Statcast visualization pages"
+    base_url: "https://baseballsavant.mlb.com/visuals/{type}"
+    method: GET
+    format: HTML
+    types:
+      - pitch3d
+      - batting-stance
+      - fielder-positioning-all
+      - fielder-positioning
+      - pitcher-positioning
+      - team-positioning
+      - batter-positioning
+
+  - name: changelog
+    description: "Feature changelog"
+    url: "https://baseballsavant.mlb.com/changelog"
+    method: GET
+    format: HTML
+
+  - name: metrics_context
+    description: "Statcast metric definitions and context"
+    url: "https://baseballsavant.mlb.com/statcast-metrics-context"
+    method: GET
+    format: HTML
+
+  - name: csv_docs
+    description: "Official CSV field documentation"
+    url: "https://baseballsavant.mlb.com/csv-docs"
+    method: GET
+    format: HTML
+
+infrastructure:
+  cloud_provider: "Google Cloud"
+  migration_year: 2020
+  tracking_system: "Hawk-Eye (12 cameras, 30 fps, 18 body points)"
+  orchestration:
+    - Anthos (unified platform)
+    - GKE (containerized apps)
+    - Google Distributed Cloud (edge at stadiums)
+  data_pipeline:
+    - Cloud Dataflow (ingestion)
+    - Cloud Composer / Airflow (orchestration)
+    - BigQuery (petabyte warehouse)
+    - Cloud Storage (video clips)
+    - PostgreSQL (primary DB)
+  partnerships:
+    - SportRadar
+    - FanGraphs
+    - 30 MLB clubs (equal data access)
+
+terms_of_use:
+  - "All data property of MLB/MLB Advanced Media"
+  - "Refer to http://gdx.mlb.com/components/copyright.txt"
+  - "No commercial use without license"
+  - "Rate limiting: be respectful, no published limits"
